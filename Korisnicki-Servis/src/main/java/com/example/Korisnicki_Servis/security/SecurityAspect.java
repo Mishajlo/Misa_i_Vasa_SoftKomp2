@@ -18,8 +18,8 @@ import java.util.Arrays;
 @Aspect
 @Configuration
 public class SecurityAspect {
-
-    @Value("${oauth.jwt.secret}")
+    @Value("test123123123123123123123")
+    //@Value("${oauth.jwt.secret}")
     private String jwtSecret;
 
     private TokenService tokenService;
