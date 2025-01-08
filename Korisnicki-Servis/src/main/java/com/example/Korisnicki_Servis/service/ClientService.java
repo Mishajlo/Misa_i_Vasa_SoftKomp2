@@ -8,6 +8,8 @@ import java.util.List;
 public interface ClientService {
     List<ClientDto> findAll();
 
+    ClientDto findById(Long id);
+
     ClientDto add(RegisterClientDto registerClientDto);
 
     Boolean remove(Long id);

@@ -21,6 +21,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public ClientDto findById(Long id) {
+        Client c = clientRepository.findById(id).orElseThrow(() -> new RuntimeException("Client with id " + id + " does not exist"));
+        return modelMapper.map(c, ClientDto.class);
+    }
+
+
+    @Override
     public ClientDto add(RegisterClientDto registerClientDto) {
         Client c = modelMapper.map(registerClientDto, Client.class);
         c = clientRepository.save(c);
@@ -29,6 +36,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Boolean remove(Long id) {
-        return null;
+        Client c = clientRepository.findById(id).orElseThrow(() -> new RuntimeException("Client with id " + id + " does not exist"));
+        c.setDelete_flag(true);
+        clientRepository.save(c);
+        return true;
     }
 }
