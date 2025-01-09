@@ -1,19 +1,15 @@
-package com.example.Rezervacije_Servis.domain.utils;
+package com.example.Rezervacije_Servis.dto.reservationDTOs;
 
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Embeddable
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class User_Data {
-
-    private long user_Id;
+@NoArgsConstructor
+public class UserInfoDTO {
+    private long user_id;
     private String email;
-
 }

@@ -6,14 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Embeddable
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User_Data {
+public class Timeslot {
 
-    private long user_Id;
-    private String email;
+    private Date date;
+    private String startTime;
+    private String endTime;
 
 }
