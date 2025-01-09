@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/")
 @AllArgsConstructor
 public class ClientController {
     private ClientService clientService;
 
+    @CheckSecurity(roles = {"ADMIN"})
     @GetMapping(value = "/all")
     public ResponseEntity<List<ClientDto>> getAll() {
         return new ResponseEntity<>(clientService.findAll(), HttpStatus.OK);

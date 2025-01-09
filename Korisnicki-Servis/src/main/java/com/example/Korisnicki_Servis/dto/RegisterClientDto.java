@@ -22,4 +22,5 @@ public class RegisterClientDto {
     private String last_name;
     private String status = Status.INACTIVE.toString();
     private String role = Role.ClIENT.toString();
+    private int reservations = 0;
 }
