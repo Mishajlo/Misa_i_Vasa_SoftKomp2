@@ -25,7 +25,7 @@ public class Reservation extends BaseEntity {
     private Boolean reserved;
     private int capacity;
     @Embedded
-    private User_Data user_data;
+    private User_Data userData;
     @Embedded
     private Timeslot timeslot;
 

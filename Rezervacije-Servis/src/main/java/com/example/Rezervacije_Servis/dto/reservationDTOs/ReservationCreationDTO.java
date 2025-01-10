@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservationCreationDTO {
-    private long tableId;
     private Boolean reserved = false;
     private int capacity;
     private User_Data user = new User_Data(-1, "");

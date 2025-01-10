@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User_Data {
 
-    private long user_Id;
+    private long userId;
     private String email;
 
 }

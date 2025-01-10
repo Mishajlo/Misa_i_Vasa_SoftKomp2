@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoDTO {
-    private long userId;
-    private String email;
+public class AvailabilityDTO {
+    boolean makeAvailable;
 }
