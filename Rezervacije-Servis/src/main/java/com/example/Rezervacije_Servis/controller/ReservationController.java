@@ -38,19 +38,19 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.getAllReservationsByRestaurant(restaurant_id), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"CLIENT"})
+    @CheckSecurity(roles = {"ClIENT"})
     @PostMapping(value = "/clt/{reservation_id}")
     public ResponseEntity<Long> bookReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody UserInfoDTO userInfoDTO) {
         return new ResponseEntity<>(reservationService.makeReservation(reservation_id, userInfoDTO), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"CLIENT"})
+    @CheckSecurity(roles = {"ClIENT"})
     @DeleteMapping(value = "/clt/{reservation_id}&{user_id}")
     public ResponseEntity<Long> clientCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @PathVariable long user_id) {
         return new ResponseEntity<>(reservationService.clientCancelReservation(user_id, reservation_id), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"CLIENT"})
+    @CheckSecurity(roles = {"ClIENT"})
     @GetMapping(value = "/clt/{user_id}")
     public ResponseEntity<List<ReservationInfoDTO>> getClientReservations(@RequestHeader("Authorization") String authorization, @PathVariable long user_id) {
         return new ResponseEntity<>(reservationService.getMyReservations(user_id), HttpStatus.OK);
