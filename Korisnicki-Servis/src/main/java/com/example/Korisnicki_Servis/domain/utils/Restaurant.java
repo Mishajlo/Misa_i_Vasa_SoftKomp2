@@ -14,6 +14,6 @@ import lombok.Setter;
 public class Restaurant {
 
     private String restaurant_Id;
-    private String name;
+    private String restaurant_name;
 
 }

@@ -20,6 +20,6 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private boolean delete_flag = false;
-    private boolean active_flag;
+    //private boolean active_flag;
 
 }
