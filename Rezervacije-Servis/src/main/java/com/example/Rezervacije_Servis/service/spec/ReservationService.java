@@ -14,7 +14,7 @@ public interface ReservationService {
     long clientCancelReservation(long clientId, long reservationId);
     long managerCancelReservation(boolean makeAvailable, long reservationId);
     List<ReservationInfoDTO> getAllReservationsByRestaurant(long restaurantId);
-    List<ReservationInfoDTO> getReservations(long restaurantId, FilterDTO filterDTO);
+    List<ReservationInfoDTO> getReservationsWithFilter(long restaurantId, FilterDTO filterDTO);
     List<ReservationInfoDTO> getMyReservations(long userId);
     void cancelAllReservationsForTable(long table_id);
 

@@ -1,7 +1,6 @@
 package com.example.Rezervacije_Servis.security;
 
 
-import com.example.Rezervacije_Servis.security.CheckSecurity;
 import com.example.Rezervacije_Servis.security.service.TokenService;
 import io.jsonwebtoken.Claims;
 import org.aspectj.lang.ProceedingJoinPoint;

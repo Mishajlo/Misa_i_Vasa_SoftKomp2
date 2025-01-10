@@ -92,7 +92,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationInfoDTO> getReservations(long restaurantId, FilterDTO filterDTO) {
+    public List<ReservationInfoDTO> getReservationsWithFilter(long restaurantId, FilterDTO filterDTO) {
         List<Reservation> reservations = reservationRepository.filter(restaurantId, filterDTO);
         return List.of(modelMapper.map(reservations, ReservationInfoDTO.class));
     }

@@ -1,7 +1,6 @@
 package com.example.Rezervacije_Servis.dto.restaurantDTOs;
 
 import com.example.Rezervacije_Servis.domain.utils.Address;
-import com.example.Rezervacije_Servis.domain.utils.Kitchen_Type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestraurantDTO {
+public class RestaurantDTO {
     private long restaurant_id;
     private String name;
     private Address address;

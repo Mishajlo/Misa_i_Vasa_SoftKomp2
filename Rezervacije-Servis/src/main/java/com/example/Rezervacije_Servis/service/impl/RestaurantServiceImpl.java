@@ -2,7 +2,7 @@ package com.example.Rezervacije_Servis.service.impl;
 
 import com.example.Rezervacije_Servis.domain.entities.Restaurant;
 import com.example.Rezervacije_Servis.dto.restaurantDTOs.RestaurantModificationDTO;
-import com.example.Rezervacije_Servis.dto.restaurantDTOs.RestraurantDTO;
+import com.example.Rezervacije_Servis.dto.restaurantDTOs.RestaurantDTO;
 import com.example.Rezervacije_Servis.repository.RestaurantRepository;
 import com.example.Rezervacije_Servis.service.spec.RestaurantService;
 import jakarta.transaction.Transactional;
@@ -26,9 +26,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<RestraurantDTO> getAllRestaurants() {
+    public List<RestaurantDTO> getAllRestaurants() {
         List<Restaurant> restaurants = restaurantRepository.findAllByDeleteFlagFalse();
-        return List.of(modelMapper.map(restaurants, RestraurantDTO.class));
+        return List.of(modelMapper.map(restaurants, RestaurantDTO.class));
     }
 
     @Override
