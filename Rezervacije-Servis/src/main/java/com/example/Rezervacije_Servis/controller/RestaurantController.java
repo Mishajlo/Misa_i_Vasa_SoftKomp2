@@ -23,7 +23,7 @@ public class RestaurantController {
 
     @CheckSecurity(roles = {"MANAGER"})
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<Long> getRestaurantById(@PathVariable long id, @RequestBody RestaurantModificationDTO modificationDTO) {
+    public ResponseEntity<Long> getRestaurantById(@RequestHeader("Authorization") String authorization, @PathVariable long id, @RequestBody RestaurantModificationDTO modificationDTO) {
         return ResponseEntity.ok(restaurantService.modifyRestaurantData(id, modificationDTO));
     }
 

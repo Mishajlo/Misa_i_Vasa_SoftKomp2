@@ -26,7 +26,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ModelMapper modelMapper;
     private ReservationRepository reservationRepository;
-    private RestaurantRepository restaurantRepository;
     private TableRepository tableRepository;
 
     @Override
@@ -34,6 +33,17 @@ public class ReservationServiceImpl implements ReservationService {
         Table table = tableRepository.findById(tableId).orElse(null);
         assert table != null;
         Reservation newReservation = modelMapper.map(reservationCreationDTO, Reservation.class);
+
+        List<Reservation> reservationsForTable = reservationRepository.findAllByTable_IdAndDeleteFlagFalse(tableId);
+
+        for (Reservation reservation : reservationsForTable) {
+            if (!reservation.getTimeslot().getDate().equals(newReservation.getTimeslot().getDate())) continue;
+            if(( newReservation.getTimeslot().getStartTime().isBefore( reservation.getTimeslot().getEndTime() ) ) &&
+                    ( newReservation.getTimeslot().getEndTime().isAfter( reservation.getTimeslot().getStartTime() ) ) ){
+                return -1;
+            }
+        }
+
         newReservation.setTable(table);
         Reservation savedReservation = reservationRepository.save(newReservation);
         return savedReservation.getId();

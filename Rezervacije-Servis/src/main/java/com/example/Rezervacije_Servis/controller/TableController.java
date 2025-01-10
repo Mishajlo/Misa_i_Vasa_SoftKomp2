@@ -19,25 +19,25 @@ public class TableController {
 
     @CheckSecurity(roles = {"MANAGER"})
     @PostMapping(value = "/{restaurant_id}")
-    public ResponseEntity<Long> createTable(@PathVariable Long restaurant_id, @RequestBody TableCreationDTO TableCreationDTO) {
+    public ResponseEntity<Long> createTable(@RequestHeader("Authorization") String authorization, @PathVariable Long restaurant_id, @RequestBody TableCreationDTO TableCreationDTO) {
         return ResponseEntity.ok(tableService.createTable(restaurant_id, TableCreationDTO));
     }
 
     @CheckSecurity(roles = {"MANAGER"})
     @GetMapping(value = "/{restaurant_id}")
-    public ResponseEntity<List<TableDTO>> getAllTables(@PathVariable Long restaurant_id) {
+    public ResponseEntity<List<TableDTO>> getAllTables(@RequestHeader("Authorization") String authorization, @PathVariable Long restaurant_id) {
         return ResponseEntity.ok(tableService.getTables(restaurant_id));
     }
 
     @CheckSecurity(roles = {"MANAGER"})
     @PatchMapping(value = "/{table_id}")
-    public ResponseEntity<Long> updateTable(@PathVariable Long table_id, @RequestBody TableCreationDTO TableCreationDTO) {
+    public ResponseEntity<Long> updateTable(@RequestHeader("Authorization") String authorization, @PathVariable Long table_id, @RequestBody TableCreationDTO TableCreationDTO) {
         return ResponseEntity.ok(tableService.editTable(table_id, TableCreationDTO));
     }
 
     @CheckSecurity(roles = {"MANAGER"})
     @DeleteMapping(value = "/{table_id}")
-    public ResponseEntity<Long> deleteTable(@PathVariable Long table_id) {
+    public ResponseEntity<Long> deleteTable(@RequestHeader("Authorization") String authorization, @PathVariable Long table_id) {
         return ResponseEntity.ok(tableService.deleteTable(table_id));
     }
 

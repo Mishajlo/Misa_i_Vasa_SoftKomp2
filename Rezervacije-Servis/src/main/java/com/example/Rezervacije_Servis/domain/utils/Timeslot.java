@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Embeddable
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Timeslot {
 
     private Date date;
-    private String startTime;
-    private String endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
 }
