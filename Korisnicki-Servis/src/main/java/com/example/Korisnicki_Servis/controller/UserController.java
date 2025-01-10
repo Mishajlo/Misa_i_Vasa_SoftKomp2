@@ -2,6 +2,7 @@ package com.example.Korisnicki_Servis.controller;
 
 
 import com.example.Korisnicki_Servis.dto.*;
+import com.example.Korisnicki_Servis.security.CheckSecurity;
 import com.example.Korisnicki_Servis.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,9 @@ public class UserController {
         return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
     }
 
-    //@CheckSecurity(roles = {"ADMIN"})
+    @CheckSecurity(roles = {"ADMIN"})
     @GetMapping(value = "/all")
-    public ResponseEntity<List<ClientDto>> getAll() {
+    public ResponseEntity<List<ClientDto>> getAll(@RequestHeader("Authorization") String authorization) {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
@@ -42,21 +43,21 @@ public class UserController {
         return new ResponseEntity<>(userService.addManager(registerManagerDto), HttpStatus.OK);
     }
 
-    //@CheckSecurity(roles = {"ADMIN"})
+    @CheckSecurity(roles = {"ADMIN"})
     @PostMapping("/{id}/delete")
-    public ResponseEntity<Boolean> removeClient(@PathVariable Long id) {
+    public ResponseEntity<Boolean> removeClient(@RequestHeader("Authorization") String authorization, @PathVariable Long id) {
         return new ResponseEntity<>(userService.remove(id), HttpStatus.OK);
     }
 
-    //@CheckSecurity(roles = {"ADMIN"})
+    @CheckSecurity(roles = {"ADMIN"})
     @PatchMapping("/restrict/{id}")
-    public ResponseEntity<Boolean> restrictUser(@PathVariable Long id) {
+    public ResponseEntity<Boolean> restrictUser(@RequestHeader("Authorization") String authorization, @PathVariable Long id) {
         return new ResponseEntity<>(userService.restrict(id), HttpStatus.OK);
     }
 
-    //@CheckSecurity(roles = {"ADMIN"})
+    @CheckSecurity(roles = {"ADMIN"})
     @PatchMapping("/allow/{id}")
-    public ResponseEntity<Boolean> allowUser(@PathVariable Long id) {
+    public ResponseEntity<Boolean> allowUser(@RequestHeader("Authorization") String authorization, @PathVariable Long id) {
         return new ResponseEntity<>(userService.allow(id), HttpStatus.OK);
     }
 

@@ -93,8 +93,8 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword()).orElse(null);
         if(user != null) {
             Claims claims = Jwts.claims();
-            claims.put("username", user.getRole());
-            claims.put("password", user.getPassword());
+            claims.put("role", user.getRole().toString());
+            claims.put("username", user.getUsername());
             return tokenService.generate(claims);
         }
         return "User does not exist";

@@ -21,7 +21,7 @@ public class AppRunner {
         return args -> {
             Admin a = new Admin();
             a.setUsername("admin");
-            a.setPassword("<PASSWORD>");
+            a.setPassword("lozinka");
             a.setRole(Role.ADMIN);
             userRepository.save(a);
 
