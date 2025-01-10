@@ -4,10 +4,7 @@ import com.example.Rezervacije_Servis.domain.entities.Reservation;
 import com.example.Rezervacije_Servis.domain.entities.Restaurant;
 import com.example.Rezervacije_Servis.domain.entities.Table;
 import com.example.Rezervacije_Servis.domain.utils.User_Data;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.FilterDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.ReservationCreationDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.ReservationInfoDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.UserInfoDTO;
+import com.example.Rezervacije_Servis.dto.reservationDTOs.*;
 import com.example.Rezervacije_Servis.repository.ReservationRepository;
 import com.example.Rezervacije_Servis.repository.RestaurantRepository;
 import com.example.Rezervacije_Servis.repository.TableRepository;
@@ -77,14 +74,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public long managerCancelReservation(boolean makeAvailable, long reservationId) {
+    public long managerCancelReservation(AvailabilityDTO makeAvailable, long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         assert reservation != null;
 
         if (reservation.getReserved()){
             /** Slanje klijentu maila da je cancelled */
             reservation.setUserData(new User_Data(-1, ""));
-            reservation.setReserved(makeAvailable);
+            reservation.setReserved(makeAvailable.isMakeAvailable());
             reservationRepository.save(reservation);
             return reservationId;
         }
@@ -97,20 +94,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationInfoDTO> getAllReservationsByRestaurant(long restaurantId) {
-        List<Reservation> reservations = reservationRepository.findAllByTable_Restaurant_IdAndDeleteFlagFalse(restaurantId);
-        return List.of(modelMapper.map(reservations, ReservationInfoDTO.class));
+        return reservationRepository.findAllByTable_Restaurant_IdAndDeleteFlagFalse(restaurantId).stream().map(reservation -> modelMapper.map(reservation, ReservationInfoDTO.class)).toList();
     }
 
     @Override
     public List<ReservationInfoDTO> getReservationsWithFilter(long restaurantId, FilterDTO filterDTO) {
-        List<Reservation> reservations = reservationRepository.filter(restaurantId, filterDTO);
-        return List.of(modelMapper.map(reservations, ReservationInfoDTO.class));
+        return reservationRepository.filter(restaurantId, filterDTO).stream().map(reservation -> modelMapper.map(reservation, ReservationInfoDTO.class)).toList();
     }
 
     @Override
     public List<ReservationInfoDTO> getMyReservations(long userId) {
-        List<Reservation> reservations = reservationRepository.findAllByUserData_UserIdAndDeleteFlagFalse(userId);
-        return List.of(modelMapper.map(reservations, ReservationInfoDTO.class));
+        return reservationRepository.findAllByUserData_UserIdAndDeleteFlagFalse(userId).stream().map(reservation -> modelMapper.map(reservation, ReservationInfoDTO.class)).toList();
     }
 
     @Override
@@ -118,7 +112,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservationsForTable = reservationRepository.findAllByTable_IdAndDeleteFlagFalse(table_id);
 
         for (Reservation reservation : reservationsForTable) {
-            managerCancelReservation(false, reservation.getId());
+            managerCancelReservation(new AvailabilityDTO(false), reservation.getId());
             reservation.setDeleteFlag(true);
             reservationRepository.save(reservation);
         }

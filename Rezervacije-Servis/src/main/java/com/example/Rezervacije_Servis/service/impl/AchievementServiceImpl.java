@@ -53,7 +53,7 @@ public class AchievementServiceImpl implements AchievementService {
     @Override
     public List<AchievementInfoDTO> getAllAchievements(long restaurantId) {
         List<Achievement> achievements = achievementRepository.findAllByDeleteFlagFalseAndRestaurant_Id(restaurantId);
-        return List.of(modelMapper.map(achievements, AchievementInfoDTO.class));
+        return achievementRepository.findAllByDeleteFlagFalseAndRestaurant_Id(restaurantId).stream().map(achievement -> modelMapper.map(achievement, AchievementInfoDTO.class)).toList();
     }
 
     @Override

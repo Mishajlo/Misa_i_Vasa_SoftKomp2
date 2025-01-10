@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,8 +42,7 @@ public class TableServiceImpl implements TableService {
 
     @Override
     public List<TableDTO> getTables(long restaurantId) {
-        List<Table> tables = tableRepository.findAllByDeleteFlagFalseAndRestaurant_Id(restaurantId);
-        return List.of(modelMapper.map(tables, TableDTO.class));
+        return tableRepository.findAllByDeleteFlagFalseAndRestaurant_Id(restaurantId).stream().map(table -> modelMapper.map(table, TableDTO.class)).toList();
     }
 
     @Override

@@ -37,7 +37,7 @@ public class AchievementController {
     }
 
     @CheckSecurity(roles = {"MANAGER"})
-    @GetMapping(value = "/{restaurant_id}")
+    @GetMapping(value = "/{restaurant_id}/all")
     public ResponseEntity<List<AchievementInfoDTO>> getAllAchievements(@RequestHeader("Authorization") String authorization, @PathVariable long restaurant_id) {
         return new ResponseEntity<>(achievementService.getAllAchievements(restaurant_id), HttpStatus.OK);
     }

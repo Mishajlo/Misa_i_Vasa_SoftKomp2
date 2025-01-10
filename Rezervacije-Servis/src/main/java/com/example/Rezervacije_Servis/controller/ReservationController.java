@@ -1,9 +1,6 @@
 package com.example.Rezervacije_Servis.controller;
 
-import com.example.Rezervacije_Servis.dto.reservationDTOs.FilterDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.ReservationCreationDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.ReservationInfoDTO;
-import com.example.Rezervacije_Servis.dto.reservationDTOs.UserInfoDTO;
+import com.example.Rezervacije_Servis.dto.reservationDTOs.*;
 import com.example.Rezervacije_Servis.security.CheckSecurity;
 import com.example.Rezervacije_Servis.service.spec.ReservationService;
 import lombok.AllArgsConstructor;
@@ -28,8 +25,8 @@ public class ReservationController {
 
     @CheckSecurity(roles = {"MANAGER"})
     @DeleteMapping(value = "/mng/{reservation_id}")
-    public ResponseEntity<Long> managerCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody boolean makeAvailable) {
-        return new ResponseEntity<>(reservationService.managerCancelReservation(makeAvailable, reservation_id), HttpStatus.OK);
+    public ResponseEntity<Long> managerCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody AvailabilityDTO availabilityDTO) {
+        return new ResponseEntity<>(reservationService.managerCancelReservation(availabilityDTO, reservation_id), HttpStatus.OK);
     }
 
     @CheckSecurity(roles = {"MANAGER"})
@@ -38,19 +35,19 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.getAllReservationsByRestaurant(restaurant_id), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"ClIENT"})
+    @CheckSecurity(roles = {"CLIENT"})
     @PostMapping(value = "/clt/{reservation_id}")
     public ResponseEntity<Long> bookReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody UserInfoDTO userInfoDTO) {
         return new ResponseEntity<>(reservationService.makeReservation(reservation_id, userInfoDTO), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"ClIENT"})
+    @CheckSecurity(roles = {"CLIENT"})
     @DeleteMapping(value = "/clt/{reservation_id}&{user_id}")
     public ResponseEntity<Long> clientCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @PathVariable long user_id) {
         return new ResponseEntity<>(reservationService.clientCancelReservation(user_id, reservation_id), HttpStatus.OK);
     }
 
-    @CheckSecurity(roles = {"ClIENT"})
+    @CheckSecurity(roles = {"CLIENT"})
     @GetMapping(value = "/clt/{user_id}")
     public ResponseEntity<List<ReservationInfoDTO>> getClientReservations(@RequestHeader("Authorization") String authorization, @PathVariable long user_id) {
         return new ResponseEntity<>(reservationService.getMyReservations(user_id), HttpStatus.OK);
