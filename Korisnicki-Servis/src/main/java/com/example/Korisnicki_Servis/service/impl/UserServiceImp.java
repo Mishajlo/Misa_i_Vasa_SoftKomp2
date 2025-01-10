@@ -76,6 +76,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Boolean editProfile(UserDto userDto) {
+        return null;
+    }
+
+    @Override
     public String login(LoginDto loginDto) {
         User user = userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword()).orElse(null);
         if(user != null) {
@@ -86,6 +91,8 @@ public class UserServiceImp implements UserService {
         }
         return "User does not exist";
     }
+
+
 
 
 }

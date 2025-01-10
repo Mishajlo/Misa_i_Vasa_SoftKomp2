@@ -61,4 +61,14 @@ public class UserController {
         return new ResponseEntity<>(userService.allow(id), HttpStatus.OK);
     }
 
+    @PatchMapping("/logout")
+    public ResponseEntity<Boolean> logoutUser() {
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Boolean> editProfile(){
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
 }
