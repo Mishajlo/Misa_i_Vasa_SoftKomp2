@@ -22,7 +22,7 @@ public interface UserService {
 
     Boolean remove(Long id);
 
-    Boolean editProfile(UserDto userDto);
+    UserDto editProfile(Long id,EditProfileDto editProfileDto);
 
 
 }

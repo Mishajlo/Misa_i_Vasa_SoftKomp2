@@ -2,7 +2,6 @@ package com.example.Korisnicki_Servis.controller;
 
 
 import com.example.Korisnicki_Servis.dto.*;
-import com.example.Korisnicki_Servis.security.CheckSecurity;
 import com.example.Korisnicki_Servis.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,9 +65,9 @@ public class UserController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Boolean> editProfile(){
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    @PutMapping("/{id}/edit")
+    public ResponseEntity<UserDto> editProfile(@PathVariable Long id, @RequestBody EditProfileDto editedProfile){
+        return new ResponseEntity<>(userService.editProfile(id, editedProfile), HttpStatus.OK);
     }
 
 }

@@ -76,8 +76,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Boolean editProfile(UserDto userDto) {
-        return null;
+    public UserDto editProfile(Long id,EditProfileDto editedProfile) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " does not exist"));
+        user.setUsername(editedProfile.getUsername());
+        user.setPassword(editedProfile.getPassword());
+        user.setEmail(editedProfile.getEmail());
+        user.setBirthday(editedProfile.getBirthday());
+        user.setFirst_name(editedProfile.getFirstName());
+        user.setLast_name(editedProfile.getLastName());
+        userRepository.save(user);
+        return modelMapper.map(user, UserDto.class) ;
     }
 
     @Override
