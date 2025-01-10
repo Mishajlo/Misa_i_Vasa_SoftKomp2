@@ -1,5 +1,6 @@
 package com.example.Rezervacije_Servis.domain.entities;
 
+import com.example.Rezervacije_Servis.domain.utils.Timeslot;
 import com.example.Rezervacije_Servis.domain.utils.User_Data;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,14 +20,13 @@ import lombok.Setter;
 public class Reservation extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "timeslot_id")
-    private Timeslot timeslot;
-    @ManyToOne
     @JoinColumn(name = "table_id")
     private Table table;
     private Boolean reserved;
     private int capacity;
     @Embedded
-    private User_Data user_data;
+    private User_Data userData;
+    @Embedded
+    private Timeslot timeslot;
 
 }

@@ -22,7 +22,8 @@ public class Restaurant extends BaseEntity {
     private Address address;
     private String description;
     private int tables;
-    private String working_hours;
+    private String opening_hours;
+    private String closing_hours;
     @Enumerated(EnumType.STRING)
     private Kitchen_Type kitchenType;
 
