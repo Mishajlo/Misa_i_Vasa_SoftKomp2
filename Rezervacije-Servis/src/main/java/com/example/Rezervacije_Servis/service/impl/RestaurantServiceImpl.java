@@ -27,8 +27,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<RestaurantDTO> getAllRestaurants() {
-        List<Restaurant> restaurants = restaurantRepository.findAllByDeleteFlagFalse();
-        return List.of(modelMapper.map(restaurants, RestaurantDTO.class));
+//        List<Restaurant> restaurants = restaurantRepository.findAllByDeleteFlagFalse();
+//        return List.of(modelMapper.map(restaurants, RestaurantDTO.class));
+          return restaurantRepository.findAllByDeleteFlagFalse().stream().map(restaurant -> modelMapper.map(restaurant, RestaurantDTO.class)).toList();
     }
 
     @Override
