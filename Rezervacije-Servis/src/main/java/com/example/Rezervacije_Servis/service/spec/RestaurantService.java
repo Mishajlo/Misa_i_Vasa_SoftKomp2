@@ -10,6 +10,6 @@ public interface RestaurantService {
 
      Restaurant getRestaurantById(long id);
      List<RestraurantDTO> getAllRestaurants();
-     String modifyRestaurantData(long id, RestaurantModificationDTO restaurantModificationDTO);
+     long modifyRestaurantData(long id, RestaurantModificationDTO restaurantModificationDTO);
 
 }
