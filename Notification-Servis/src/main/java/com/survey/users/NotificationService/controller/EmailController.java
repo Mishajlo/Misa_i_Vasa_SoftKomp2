@@ -1,6 +1,6 @@
 package com.survey.users.NotificationService.controller;
 
-import com.survey.users.NotificationService.service.EmailService;
+import com.survey.users.NotificationService.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 
     @Autowired
-    private EmailService emailService;
+    private NotificationService emailService;
 
     @GetMapping
     public ResponseEntity<Boolean> sendSimpleMail(@RequestParam String to, @RequestParam String subject, @RequestParam String body){

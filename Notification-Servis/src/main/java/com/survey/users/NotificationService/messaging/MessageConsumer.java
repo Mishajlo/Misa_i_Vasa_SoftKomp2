@@ -1,16 +1,15 @@
 package com.survey.users.NotificationService.messaging;
 
-import com.survey.users.NotificationService.service.EmailService;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import com.survey.users.NotificationService.service.NotificationService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageConsumer {
 
-    private EmailService emailService;
+    private NotificationService notificationService;
 
-    public MessageConsumer(EmailService emailService){
-        this.emailService = emailService;
+    public MessageConsumer(NotificationService notificationService){
+        this.notificationService = notificationService;
     }
 
     /**
