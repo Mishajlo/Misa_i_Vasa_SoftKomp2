@@ -22,6 +22,11 @@ public class UserController {
         return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
     }
 
+//    @GetMapping("/activation/{user_code}")
+//    public ResponseEntity<Boolean> activateUser(@PathVariable String user_code) {
+//        return new ResponseEntity<>()
+//    }
+
     @CheckSecurity(roles = {"ADMIN"})
     @GetMapping(value = "/all")
     public ResponseEntity<List<ClientDto>> getAll(@RequestHeader("Authorization") String authorization) {

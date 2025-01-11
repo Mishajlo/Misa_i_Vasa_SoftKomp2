@@ -24,5 +24,6 @@ public interface UserService {
 
     UserDto editProfile(Long id,EditProfileDto editProfileDto);
 
+    Boolean activate(String user_code);
 
 }

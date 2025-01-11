@@ -89,12 +89,22 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public Boolean activate(String user_code) {
+        //User u = userRepository.fin
+        return null;
+    }
+
+    @Override
     public String login(LoginDto loginDto) {
         User user = userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword()).orElse(null);
+        if(user != null && user.getStatus() == Status.BANNED) {
+            return "User is banned";
+        }
         if(user != null) {
             Claims claims = Jwts.claims();
             claims.put("role", user.getRole().toString());
             claims.put("username", user.getUsername());
+            claims.put("id", user.getId());
             return tokenService.generate(claims);
         }
         return "User does not exist";
