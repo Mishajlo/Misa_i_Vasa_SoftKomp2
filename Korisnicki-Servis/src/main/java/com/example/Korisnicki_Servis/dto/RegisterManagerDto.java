@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Setter
 @Getter
@@ -18,12 +17,13 @@ public class RegisterManagerDto {
     private String username;
     private String password;
     private String email;
-    private Date birthday;
+    private String birthday;
     private String first_name;
     private String last_name;
     private Restaurant restaurant;
-    private Date date_of_employment;
+    private String date_of_employment;
     private String status = Status.INACTIVE.toString();
     private String role = Role.MANAGER.toString();
+    private String activationCode = String.valueOf(System.currentTimeMillis());
 
 }

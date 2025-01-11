@@ -1,6 +1,6 @@
 package com.example.Rezervacije_Servis.dto.reservationDTOs;
 
-import com.example.Rezervacije_Servis.domain.utils.Timeslot;
+
 import com.example.Rezervacije_Servis.domain.utils.User_Data;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +15,8 @@ public class ReservationCreationDTO {
     private Boolean reserved = false;
     private int capacity;
     private User_Data user = new User_Data(-1, "");
-    private Timeslot timeslot;
+    //private Timeslot timeslot;
+    private String date;
+    private String startTime;
+    private String endTime;
 }

@@ -1,42 +1,56 @@
 package com.example.Rezervacije_Servis.service.impl;
 
 import com.example.Rezervacije_Servis.domain.entities.Reservation;
-import com.example.Rezervacije_Servis.domain.entities.Restaurant;
 import com.example.Rezervacije_Servis.domain.entities.Table;
 import com.example.Rezervacije_Servis.domain.utils.User_Data;
 import com.example.Rezervacije_Servis.dto.reservationDTOs.*;
 import com.example.Rezervacije_Servis.repository.ReservationRepository;
-import com.example.Rezervacije_Servis.repository.RestaurantRepository;
 import com.example.Rezervacije_Servis.repository.TableRepository;
 import com.example.Rezervacije_Servis.service.spec.ReservationService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
 @Transactional
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     private final ModelMapper modelMapper;
-    private ReservationRepository reservationRepository;
-    private TableRepository tableRepository;
+    private final ReservationRepository reservationRepository;
+    private final TableRepository tableRepository;
+
+    public ReservationServiceImpl(ModelMapper modelMapper, ReservationRepository reservationRepository, TableRepository tableRepository) {
+        this.modelMapper = modelMapper;
+        this.reservationRepository = reservationRepository;
+        this.tableRepository = tableRepository;
+        modelMapper.addConverter((mappingContext -> {
+            String date = mappingContext.getSource().toString();
+            if(date == null || date.isEmpty()) {
+                return null;
+            }
+            return LocalDate.parse(date);
+        }));
+    }
 
     @Override
     public long createReservation(long tableId, ReservationCreationDTO reservationCreationDTO) {
         Table table = tableRepository.findById(tableId).orElse(null);
         assert table != null;
         Reservation newReservation = modelMapper.map(reservationCreationDTO, Reservation.class);
-
+        newReservation.setDate(LocalDate.parse(reservationCreationDTO.getDate()));
+        newReservation.setStartTime(LocalTime.parse(reservationCreationDTO.getStartTime()));
+        newReservation.setEndTime(LocalTime.parse(reservationCreationDTO.getEndTime()));
         List<Reservation> reservationsForTable = reservationRepository.findAllByTable_IdAndDeleteFlagFalse(tableId);
 
         for (Reservation reservation : reservationsForTable) {
-            if (!reservation.getTimeslot().getDate().equals(newReservation.getTimeslot().getDate())) continue;
-            if(( newReservation.getTimeslot().getStartTime().isBefore( reservation.getTimeslot().getEndTime() ) ) &&
-                    ( newReservation.getTimeslot().getEndTime().isAfter( reservation.getTimeslot().getStartTime() ) ) ){
+            if (!reservation.getDate().equals(newReservation.getDate())) continue;
+            if(( newReservation.getStartTime().isBefore( reservation.getEndTime() ) ) &&
+                    ( newReservation.getEndTime().isAfter( reservation.getStartTime() ) ) ){
                 return -1;
             }
         }

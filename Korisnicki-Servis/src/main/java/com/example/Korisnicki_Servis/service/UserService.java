@@ -24,5 +24,8 @@ public interface UserService {
 
     UserDto editProfile(Long id,EditProfileDto editProfileDto);
 
+    Boolean authenticate(String authToken);
+
+
 
 }

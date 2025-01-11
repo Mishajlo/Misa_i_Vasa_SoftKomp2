@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,6 +17,6 @@ public class Manager extends User {
 
     @Embedded
     private Restaurant restaurant;
-    private Date date_of_employment;
+    private LocalDate date_of_employment;
 
 }

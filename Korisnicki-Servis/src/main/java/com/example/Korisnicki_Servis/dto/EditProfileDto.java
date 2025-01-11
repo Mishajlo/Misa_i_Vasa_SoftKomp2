@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +14,7 @@ public class EditProfileDto {
     private String username;
     private String password;
     private String email;
-    private Date birthday;
+    private String birthday;
     private String firstName;
     private String lastName;
 }

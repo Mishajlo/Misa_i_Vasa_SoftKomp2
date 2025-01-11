@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Setter
 @Getter
@@ -17,10 +16,11 @@ public class RegisterClientDto {
     private String username;
     private String password;
     private String email;
-    private Date birthday;
+    private String birthday;
     private String first_name;
     private String last_name;
     private String status = Status.INACTIVE.toString();
     private String role = Role.CLIENT.toString();
     private int reservations = 0;
+    private String activationCode = String.valueOf(System.currentTimeMillis());
 }

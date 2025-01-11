@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ public class ReservationInfoDTO {
     private Boolean smoking_area;
     private Boolean sitting_area;
     private int capacity;
-    private Date date;
-    private LocalTime start_time;
-    private LocalTime end_time;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 }

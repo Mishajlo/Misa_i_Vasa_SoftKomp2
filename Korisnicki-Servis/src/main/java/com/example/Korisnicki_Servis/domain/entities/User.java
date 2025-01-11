@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "user_table")
@@ -22,12 +23,13 @@ public abstract class User extends BaseEntity {
     private String username;
     private String password;
     private String email;
-    private Date birthday;
+    private LocalDate birthday;
     private String first_name;
     private String last_name;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String activationCode;
 
 }

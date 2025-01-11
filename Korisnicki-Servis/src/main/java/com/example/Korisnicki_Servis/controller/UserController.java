@@ -22,6 +22,11 @@ public class UserController {
         return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
     }
 
+    @GetMapping("/auth/{authentication_code}")
+    public ResponseEntity<Boolean> authenticate(@PathVariable String authentication_code) {
+        return new ResponseEntity<>(userService.authenticate(authentication_code), HttpStatus.OK);
+    }
+
     @CheckSecurity(roles = {"ADMIN"})
     @GetMapping(value = "/all")
     public ResponseEntity<List<ClientDto>> getAll(@RequestHeader("Authorization") String authorization) {
@@ -39,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/register/manager")
-    public ResponseEntity<UserDto> addClient(@RequestBody RegisterManagerDto registerManagerDto) {
+    public ResponseEntity<UserDto> addManager(@RequestBody RegisterManagerDto registerManagerDto) {
         return new ResponseEntity<>(userService.addManager(registerManagerDto), HttpStatus.OK);
     }
 
