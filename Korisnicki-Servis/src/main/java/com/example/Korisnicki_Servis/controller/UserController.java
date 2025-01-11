@@ -71,4 +71,9 @@ public class UserController {
         return new ResponseEntity<>(userService.editProfile(id, editedProfile), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/activate/{link}")
+    public ResponseEntity<Boolean> activateUser(@PathVariable String link) {
+        return new ResponseEntity<>(userService.activateUser(link), HttpStatus.OK);
+    }
+
 }

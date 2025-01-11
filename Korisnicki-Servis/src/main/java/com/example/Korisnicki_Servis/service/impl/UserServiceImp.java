@@ -5,6 +5,8 @@ import com.example.Korisnicki_Servis.domain.entities.Manager;
 import com.example.Korisnicki_Servis.domain.entities.User;
 import com.example.Korisnicki_Servis.domain.utils.Status;
 import com.example.Korisnicki_Servis.dto.*;
+import com.example.Korisnicki_Servis.queue.QueueSender;
+import com.example.Korisnicki_Servis.repository.ClientRepository;
 import com.example.Korisnicki_Servis.repository.UserRepository;
 import com.example.Korisnicki_Servis.security.service.TokenService;
 import com.example.Korisnicki_Servis.service.UserService;
@@ -24,6 +26,8 @@ public class UserServiceImp implements UserService {
     private UserRepository userRepository;
     private TokenService tokenService;
     private final ModelMapper modelMapper;
+    private QueueSender queueSender;
+    private ClientRepository clientRepository;
 
     @Override
     public List<ClientDto> findAll() {
@@ -40,6 +44,15 @@ public class UserServiceImp implements UserService {
     @Override
     public UserDto addClient(RegisterClientDto registerClientDto) {
         Client c = modelMapper.map(registerClientDto, Client.class);
+        c.setActivationLink(registerClientDto.getUsername());
+        RegistrationMailDTO registrationMailDTO = new RegistrationMailDTO();
+        registrationMailDTO.setRecipientEmail(c.getEmail());
+        registrationMailDTO.setRecipientId(c.getId());
+        registrationMailDTO.setUsername(c.getUsername());
+        registrationMailDTO.setFirstName(c.getFirst_name());
+        registrationMailDTO.setLastName(c.getLast_name());
+        registrationMailDTO.setActivationLink("http://localhost:8080/users/activate" + c.getActivationLink());
+        queueSender.sendMessage(registrationMailDTO);
         c = userRepository.save(c);
         return modelMapper.map(c, UserDto.class);
     }
@@ -86,6 +99,14 @@ public class UserServiceImp implements UserService {
         user.setLast_name(editedProfile.getLastName());
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class) ;
+    }
+
+    @Override
+    public Boolean activateUser(String code) {
+        Client client = clientRepository.findByActivationLink(code);
+        client.setStatus(Status.ACTIVE);
+        clientRepository.save(client);
+        return true;
     }
 
     @Override

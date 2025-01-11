@@ -1,4 +1,5 @@
-package com.survey.users.NotificationService.config;
+package com.example.Korisnicki_Servis.config;
+
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class RabbitConfig {
 
     @Value("registration")
     private String QUEUE_NAME;
@@ -50,21 +51,22 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue queue() {
-        return new Queue("queue.registration", true, false, false);  // Durable, non-exclusive, non-auto-delete
+        return new Queue("queue.registration", true);
     }
 
     @Bean
-    public FanoutExchange fanoutExchange() {
-        return new FanoutExchange("regisration");
-    }
-
-    @Bean
-    TopicExchange messageExchange() {
+    TopicExchange labAnalizaExchange() {
         return new TopicExchange("email");
     }
+
+    /*@Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("registration");
+    }*/
 
     @Bean
     public Binding binding(Queue queue, TopicExchange directExchange) {
         return BindingBuilder.bind(queue).to(directExchange).with("message"); // Routing key "lab"
     }
 }
+

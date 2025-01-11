@@ -1,6 +1,8 @@
 package com.survey.users.NotificationService.messaging;
 
+import com.survey.users.NotificationService.dto.RegistrationDTO;
 import com.survey.users.NotificationService.service.NotificationService;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,4 +21,10 @@ public class MessageConsumer {
         emailService.sendMail("jnajdic@raf.rs", null, "Aktivacija", message);
     }
     */
+
+    @RabbitListener(queues = "queue.registration")
+    public void receiveRegistration(RegistrationDTO registrationDTO){
+        System.out.println("New Registration Received");
+        notificationService.registrationMail(registrationDTO);
+    }
 }
