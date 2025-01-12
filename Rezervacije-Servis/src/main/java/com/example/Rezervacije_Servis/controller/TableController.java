@@ -38,7 +38,7 @@ public class TableController {
     @CheckSecurity(roles = {"MANAGER"})
     @DeleteMapping(value = "/{table_id}")
     public ResponseEntity<Long> deleteTable(@RequestHeader("Authorization") String authorization, @PathVariable Long table_id) {
-        return ResponseEntity.ok(tableService.deleteTable(table_id));
+        return ResponseEntity.ok(tableService.deleteTable(table_id, authorization));
     }
 
 }

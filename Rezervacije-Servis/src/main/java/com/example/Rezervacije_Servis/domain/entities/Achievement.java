@@ -20,7 +20,7 @@ public class Achievement extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    private int condition_number;
+    private int condition;
     private String title;
     private String description;
 

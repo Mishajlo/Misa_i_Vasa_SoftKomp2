@@ -1,40 +1,71 @@
 package com.survey.users.NotificationService.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
+/*
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${rabbitmq.queue.name}")
-    private String queue;
+    @Value("registration")
+    private String QUEUE_NAME;
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchange;
+    @Value("${rabbitmq.host:localhost}")
+    private String rabbitHost;
 
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    @Value("${rabbitmq.port:5672}")
+    private int rabbitPort;
+
+    @Value("${rabbitmq.username:guest}")
+    private String rabbitUsername;
+
+    @Value("${rabbitmq.password:guest}")
+    private String rabbitPassword;
 
     @Bean
-    public Queue queue(){
-        return new Queue(queue);
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitHost);
+        connectionFactory.setPort(rabbitPort);
+        connectionFactory.setUsername(rabbitUsername);
+        connectionFactory.setPassword(rabbitPassword);
+        return connectionFactory;
     }
 
     @Bean
-    public TopicExchange exchange(){
-        return new TopicExchange(exchange);
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
     }
 
     @Bean
-    public Binding binding(){
-        return BindingBuilder.bind(queue())
-                .to(exchange())
-                .with(routingKey);
+    public Jackson2JsonMessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public Queue queue() {
+        return new Queue("queue.registration", true, false, false);  // Durable, non-exclusive, non-auto-delete
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("regisration");
+    }
+
+    @Bean
+    TopicExchange messageExchange() {
+        return new TopicExchange("email");
+    }
+
+    @Bean
+    public Binding binding(Queue queue, TopicExchange directExchange) {
+        return BindingBuilder.bind(queue).to(directExchange).with("message"); // Routing key "lab"
     }
 }
+*/

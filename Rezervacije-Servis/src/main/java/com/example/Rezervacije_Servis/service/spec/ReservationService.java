@@ -7,12 +7,12 @@ import java.util.List;
 public interface ReservationService {
 
     long createReservation(long restaurantId, ReservationCreationDTO reservationCreationDTO);
-    long makeReservation(long reservationId, UserInfoDTO userInfoDTO);
-    long clientCancelReservation(long clientId, long reservationId);
-    long managerCancelReservation(AvailabilityDTO makeAvailable, long reservationId);
+    long makeReservation(long reservationId, UserInfoDTO userInfoDTO, String token);
+    long clientCancelReservation(long clientId, long reservationId, String token);
+    long managerCancelReservation(AvailabilityDTO makeAvailable, long reservationId, String token);
     List<ReservationInfoDTO> getAllReservationsByRestaurant(long restaurantId);
     List<ReservationInfoDTO> getReservationsWithFilter(long restaurantId, FilterDTO filterDTO);
     List<ReservationInfoDTO> getMyReservations(long userId);
-    void cancelAllReservationsForTable(long table_id);
+    void cancelAllReservationsForTable(long table_id, String token);
 
 }

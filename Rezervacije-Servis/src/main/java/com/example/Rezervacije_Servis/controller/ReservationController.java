@@ -26,7 +26,7 @@ public class ReservationController {
     @CheckSecurity(roles = {"MANAGER"})
     @DeleteMapping(value = "/mng/{reservation_id}")
     public ResponseEntity<Long> managerCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody AvailabilityDTO availabilityDTO) {
-        return new ResponseEntity<>(reservationService.managerCancelReservation(availabilityDTO, reservation_id), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.managerCancelReservation(availabilityDTO, reservation_id, authorization), HttpStatus.OK);
     }
 
     @CheckSecurity(roles = {"MANAGER"})
@@ -38,13 +38,13 @@ public class ReservationController {
     @CheckSecurity(roles = {"CLIENT"})
     @PostMapping(value = "/clt/{reservation_id}")
     public ResponseEntity<Long> bookReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @RequestBody UserInfoDTO userInfoDTO) {
-        return new ResponseEntity<>(reservationService.makeReservation(reservation_id, userInfoDTO), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.makeReservation(reservation_id, userInfoDTO, authorization), HttpStatus.OK);
     }
 
     @CheckSecurity(roles = {"CLIENT"})
     @DeleteMapping(value = "/clt/{reservation_id}&{user_id}")
     public ResponseEntity<Long> clientCancelReservation(@RequestHeader("Authorization") String authorization, @PathVariable long reservation_id, @PathVariable long user_id) {
-        return new ResponseEntity<>(reservationService.clientCancelReservation(user_id, reservation_id), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.clientCancelReservation(user_id, reservation_id, authorization), HttpStatus.OK);
     }
 
     @CheckSecurity(roles = {"CLIENT"})

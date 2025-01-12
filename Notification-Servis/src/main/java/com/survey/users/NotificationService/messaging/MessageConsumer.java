@@ -1,16 +1,17 @@
 package com.survey.users.NotificationService.messaging;
 
-import com.survey.users.NotificationService.service.EmailService;
+import com.survey.users.NotificationService.dto.UniversalDTO;
+import com.survey.users.NotificationService.service.NotificationService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageConsumer {
 
-    private EmailService emailService;
+    private NotificationService notificationService;
 
-    public MessageConsumer(EmailService emailService){
-        this.emailService = emailService;
+    public MessageConsumer(NotificationService notificationService){
+        this.notificationService = notificationService;
     }
 
     /**
@@ -20,4 +21,11 @@ public class MessageConsumer {
         emailService.sendMail("jnajdic@raf.rs", null, "Aktivacija", message);
     }
     */
+
+    @RabbitListener(queues = "notification.queue")
+    public void receiveRegistration(UniversalDTO universalDTO){
+        System.out.println("poslato s queuea");
+        System.out.println(universalDTO);
+        notificationService.registrationMail(universalDTO);
+    }
 }
