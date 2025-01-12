@@ -47,9 +47,10 @@ public class SchedulerImpl {
         List<Reservation> upcomingReservations = new ArrayList<>();
 
         for (Reservation reservation : toCheck) {
-            LocalDateTime resTime = reservation.getTimeslot().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            resTime = resTime.plusHours(reservation.getTimeslot().getStartTime().getHour());
-            if (resTime == tommorow) {
+            //LocalDateTime resTime = reservation.getTimeslot().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime resTime = reservation.getDate().atTime(reservation.getStartTime());
+//            resTime = resTime.plusHours(reservation.getTimeslot().getStartTime().getHour());
+            if (resTime.equals(tommorow)) {
                 upcomingReservations.add(reservation);
             }
         }
@@ -61,7 +62,7 @@ public class SchedulerImpl {
                 notification.setRecipientEmail(reservation.getUserData().getEmail());
                 notification.setRecipientId(reservation.getUserData().getUserId());
                 notification.getParams().add(reservation.getTable().getRestaurant().getName());
-                notification.getParams().add(reservation.getTimeslot().getDate().toString());
+                notification.getParams().add(reservation.getDate().toString());
 
 
                 sendToNotification.sendNotification(notification);
@@ -80,8 +81,9 @@ public class SchedulerImpl {
 
         List<Reservation> completedReservations = new ArrayList<>();
         for (Reservation reservation : toCheck) {
-            LocalDateTime resTime = reservation.getTimeslot().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            resTime = resTime.plusHours(reservation.getTimeslot().getEndTime().getHour());
+            //LocalDateTime resTime = reservation.getTimeslot().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime resTime = reservation.getDate().atTime(reservation.getStartTime());
+            //resTime = resTime.plusHours(reservation.getTimeslot().getEndTime().getHour());
             if (resTime.isBefore(now)) {
                 completedReservations.add(reservation);
             }

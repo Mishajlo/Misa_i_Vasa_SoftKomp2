@@ -17,18 +17,35 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @Transactional
-@AllArgsConstructor
+//@AllArgsConstructor
 public class UserServiceImp implements UserService {
     private UserRepository userRepository;
     private TokenService tokenService;
     private final ModelMapper modelMapper;
     private QueueSender queueSender;
     private ClientRepository clientRepository;
+
+    public UserServiceImp(ModelMapper modelMapper, UserRepository userRepository, TokenService tokenService, QueueSender queueSender, ClientRepository clientRepository) {
+        this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.queueSender = queueSender;
+        this.clientRepository = clientRepository;
+        modelMapper.addConverter((mappingContext -> {
+            String date = mappingContext.getSource().toString();
+            if(date == null || date.isEmpty()) {
+                return null;
+            }
+            return LocalDate.parse(date);
+        }));
+    }
 
     @Override
     public List<ClientDto> findAll() {
@@ -45,14 +62,14 @@ public class UserServiceImp implements UserService {
     @Override
     public UserDto addClient(RegisterClientDto registerClientDto) {
         Client c = modelMapper.map(registerClientDto, Client.class);
-        c.setActivationLink(registerClientDto.getUsername());
+        c.setBirthday(LocalDate.parse(registerClientDto.getBirthday()));
         RegistrationMailDTO registrationMailDTO = new RegistrationMailDTO();
         registrationMailDTO.setRecipientEmail(c.getEmail());
         registrationMailDTO.setRecipientId(c.getId());
         registrationMailDTO.getParams().add(c.getFirst_name());
         registrationMailDTO.getParams().add(c.getLast_name());
         registrationMailDTO.getParams().add(c.getUsername());
-        registrationMailDTO.getParams().add("http://localhost:8080/users/activate/" + c.getActivationLink());
+        registrationMailDTO.getParams().add("http://localhost:8085/users/users/auth/" + c.getActivationCode());
 
         queueSender.sendNotification(registrationMailDTO);
         c = userRepository.save(c);
@@ -62,6 +79,8 @@ public class UserServiceImp implements UserService {
     @Override
     public UserDto addManager(RegisterManagerDto registerManagerDto) {
         Manager m = modelMapper.map(registerManagerDto, Manager.class);
+        m.setBirthday(LocalDate.parse(registerManagerDto.getBirthday()));
+        m.setDate_of_employment(LocalDate.parse(registerManagerDto.getDate_of_employment()));
         m = userRepository.save(m);
         return modelMapper.map(m, UserDto.class);
     }
@@ -111,7 +130,7 @@ public class UserServiceImp implements UserService {
             user.setEmail(editedProfile.getEmail());
         }
         if (editedProfile.getBirthday() != null){
-            user.setBirthday(editedProfile.getBirthday());
+            user.setBirthday(LocalDate.parse(editedProfile.getBirthday()));
         }
         if (editedProfile.getFirstName() != null) {
             user.setFirst_name(editedProfile.getFirstName());
@@ -123,14 +142,30 @@ public class UserServiceImp implements UserService {
         return modelMapper.map(user, UserDto.class) ;
     }
 
+//    @Override
+//    public Boolean activateUser(String code) {
+//        Client client = clientRepository.findByActivationLink(code);
+//        System.out.println(code);
+//        client.setStatus(Status.ACTIVE);
+//        clientRepository.save(client);
+//        return true;
+//    }
+
     @Override
-    public Boolean activateUser(String code) {
-        Client client = clientRepository.findByActivationLink(code);
-        System.out.println(code);
-        client.setStatus(Status.ACTIVE);
-        clientRepository.save(client);
-        return true;
+    public Boolean authenticate(String authToken) {
+        User u = userRepository.findByActivationCode(authToken).orElse(null);
+        if(u != null) {
+            if(Objects.equals(u.getActivationCode(), authToken) && u.getStatus() == Status.INACTIVE){
+                u.setStatus(Status.ACTIVE);
+                userRepository.save(u);
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return null;
     }
+
 
     @Override
     public Integer updateReservations(Long id, Boolean increment) {
@@ -147,6 +182,8 @@ public class UserServiceImp implements UserService {
     public String login(LoginDto loginDto) {
         User user = userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword()).orElse(null);
         if(user != null) {
+            if(user.getStatus() == Status.BANNED) return "User is banned";
+            if(user.getStatus() == Status.INACTIVE) return "User is not activated";
             Claims claims = Jwts.claims();
             claims.put("role", user.getRole().toString());
             claims.put("username", user.getUsername());

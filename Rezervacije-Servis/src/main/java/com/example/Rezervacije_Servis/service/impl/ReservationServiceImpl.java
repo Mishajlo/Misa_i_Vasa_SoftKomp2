@@ -18,12 +18,13 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 @Service
 @Transactional
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     private final ModelMapper modelMapper;
@@ -34,23 +35,42 @@ public class ReservationServiceImpl implements ReservationService {
     private SendToNotification sendToNotification;
     private AchievementService achievementService;
 
+    public ReservationServiceImpl(ModelMapper modelMapper, ReservationRepository reservationRepository, TableRepository tableRepository, RestaurantRepository restaurantRepository, SendToClient sendToClient, SendToNotification sendToNotification, AchievementService achievementService) {
+        this.modelMapper = modelMapper;
+        this.reservationRepository = reservationRepository;
+        this.tableRepository = tableRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.sendToClient = sendToClient;
+        this.sendToNotification = sendToNotification;
+        this.achievementService = achievementService;
+        modelMapper.addConverter((mappingContext -> {
+            String date = mappingContext.getSource().toString();
+            if(date == null || date.isEmpty()) {
+                return null;
+            }
+            return LocalDate.parse(date);
+        }));
+    }
+
     @Override
     public long createReservation(long tableId, ReservationCreationDTO reservationCreationDTO) {
         Table table = tableRepository.findById(tableId).orElse(null);
         assert table != null;
         Restaurant restaurant = restaurantRepository.findById(table.getRestaurant().getId()).orElse(null);
-
         assert restaurant != null;
         Reservation newReservation = modelMapper.map(reservationCreationDTO, Reservation.class);
-        if (reservationCreationDTO.getTimeslot().getStartTime().isAfter(LocalTime.parse(restaurant.getClosing_hours()))){
+        newReservation.setDate(LocalDate.parse(reservationCreationDTO.getDate()));
+        newReservation.setStartTime(LocalTime.parse(reservationCreationDTO.getStartTime()));
+        newReservation.setEndTime(LocalTime.parse(reservationCreationDTO.getEndTime()));
+        if (LocalTime.parse(reservationCreationDTO.getStartTime()).isAfter(restaurant.getClosing_hours())){
             return -1;
         }
         List<Reservation> reservationsForTable = reservationRepository.findAllByTable_IdAndDeleteFlagFalse(tableId);
 
         for (Reservation reservation : reservationsForTable) {
-            if (!reservation.getTimeslot().getDate().equals(newReservation.getTimeslot().getDate())) continue;
-            if(( newReservation.getTimeslot().getStartTime().isBefore( reservation.getTimeslot().getEndTime() ) ) &&
-                    ( newReservation.getTimeslot().getEndTime().isAfter( reservation.getTimeslot().getStartTime() ) ) ){
+            if (!reservation.getDate().equals(newReservation.getDate())) continue;
+            if(( newReservation.getStartTime().isBefore( reservation.getEndTime() ) ) &&
+                    ( newReservation.getEndTime().isAfter( reservation.getStartTime() ) ) ){
                 return -1;
             }
         }
@@ -82,7 +102,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationNotification.setRestaurantId(restaurant.getId());
         reservationNotification.getParams().add(restaurant.getName());
         reservationNotification.getParams().add(String.valueOf(reservation.getTable().getId()));
-        reservationNotification.getParams().add(reservation.getTimeslot().getDate().toString());
+        reservationNotification.getParams().add(reservation.getDate().toString());
         sendToNotification.sendNotification(reservationNotification);
 
         reservation.setUserData(modelMapper.map(userInfoDTO, User_Data.class));
@@ -110,7 +130,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationNotification.setRestaurantName(restaurant.getName());
         reservationNotification.setRestaurantId(restaurant.getId());
         reservationNotification.getParams().add(reservation.getUserData().getEmail());
-        reservationNotification.getParams().add(reservation.getTimeslot().getDate().toString());
+        reservationNotification.getParams().add(reservation.getDate().toString());
         reservationNotification.getParams().add(restaurant.getName());
         sendToNotification.sendNotification(reservationNotification);
 
@@ -137,7 +157,7 @@ public class ReservationServiceImpl implements ReservationService {
             reservationNotification.setRestaurantName(restaurant.getName());
             reservationNotification.setRestaurantId(restaurant.getId());
             reservationNotification.getParams().add(restaurant.getName());
-            reservationNotification.getParams().add(reservation.getTimeslot().getDate().toString());
+            reservationNotification.getParams().add(reservation.getDate().toString());
             sendToNotification.sendNotification(reservationNotification);
 
             reservation.setUserData(new User_Data(-1, ""));

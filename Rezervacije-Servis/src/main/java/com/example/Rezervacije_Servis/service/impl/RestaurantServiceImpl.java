@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -53,10 +54,10 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setKitchenType(restaurantModificationDTO.getKitchenType());
         }
         if (restaurantModificationDTO.getOpening_hours() != null) {
-            restaurant.setOpening_hours(restaurantModificationDTO.getOpening_hours());
+            restaurant.setOpening_hours(LocalTime.parse(restaurantModificationDTO.getOpening_hours()));
         }
         if (restaurantModificationDTO.getClosing_hours() != null) {
-            restaurant.setClosing_hours(restaurantModificationDTO.getClosing_hours());
+            restaurant.setClosing_hours(LocalTime.parse(restaurantModificationDTO.getClosing_hours()));
         }
 
         restaurantRepository.save(restaurant);

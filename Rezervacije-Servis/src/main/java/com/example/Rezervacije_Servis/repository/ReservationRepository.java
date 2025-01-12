@@ -28,7 +28,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "r.capacity = :#{#filter.capacity} and " +
             "r.table.sitting_area = :#{#filter.outside} and " +
             "r.table.smoking_area = :#{#filter.smoking} and " +
-            "r.timeslot = :#{#filter.timeslot} and " +
+//            "r.timeslot = :#{#filter.timeslot} and " +
+            "r.date = :#{#filter.date} and " +
             "r.table.restaurant.address = :#{#filter.address} and " +
             "r.table.restaurant.kitchenType = :#{#filter.kitchenType}")
     List<Reservation> filter(@Param("restaurantId") long restaurantId, @Param("filter") FilterDTO filter);

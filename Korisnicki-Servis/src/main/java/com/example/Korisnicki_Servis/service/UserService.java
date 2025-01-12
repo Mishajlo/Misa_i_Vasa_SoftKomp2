@@ -24,7 +24,9 @@ public interface UserService {
 
     UserDto editProfile(Long id,EditProfileDto editProfileDto);
 
-    Boolean activateUser(String code);
+    //Boolean activateUser(String code);
+
+    Boolean authenticate(String authToken);
 
     Integer updateReservations(Long id, Boolean increment);
 

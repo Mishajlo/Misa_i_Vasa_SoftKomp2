@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "restaurants")
 @Getter
@@ -22,8 +24,8 @@ public class Restaurant extends BaseEntity {
     private Address address;
     private String description;
     private int tables;
-    private String opening_hours;
-    private String closing_hours;
+    private LocalTime opening_hours;
+    private LocalTime closing_hours;
     @Enumerated(EnumType.STRING)
     private Kitchen_Type kitchenType;
     private long managerId;

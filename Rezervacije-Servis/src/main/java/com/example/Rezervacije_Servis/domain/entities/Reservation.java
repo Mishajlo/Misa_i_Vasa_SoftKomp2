@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 @jakarta.persistence.Table(name = "reservations")
 @Getter
@@ -26,8 +29,11 @@ public class Reservation extends BaseEntity {
     private int capacity;
     @Embedded
     private User_Data userData;
-    @Embedded
-    private Timeslot timeslot;
+//    @Embedded
+//    private Timeslot timeslot;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Boolean reminder = false;
 
 }

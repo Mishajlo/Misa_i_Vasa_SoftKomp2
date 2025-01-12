@@ -13,6 +13,5 @@ import lombok.Setter;
 public class Client extends User {
 
     private int reservations;
-    private String activationLink;
 
 }

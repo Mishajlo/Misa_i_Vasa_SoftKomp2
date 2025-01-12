@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class User extends BaseEntity {
-
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
@@ -30,6 +30,7 @@ public abstract class User extends BaseEntity {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(unique = true)
     private String activationCode;
 
 }

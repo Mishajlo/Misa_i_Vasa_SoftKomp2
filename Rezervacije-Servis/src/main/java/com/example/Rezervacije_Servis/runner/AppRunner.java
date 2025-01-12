@@ -17,6 +17,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +44,7 @@ public class AppRunner {
             r.setManagerEmail("mihajlo2003matic@gmail.com");
             r.setManagerId(2);
             r.setDescription("doqjdoajidw");
-            r.setClosing_hours("12");
+            r.setClosing_hours(LocalTime.parse("12:00:00"));
             r.setKitchenType(Kitchen_Type.Indian);
             restaurantRepository.save(r);
             Achievement a = new Achievement();
@@ -63,7 +64,9 @@ public class AppRunner {
             proba.setCapacity(3);
             proba.setReserved(false);
             Date datum = new Date(125, Calendar.JANUARY, 13);
-            proba.setTimeslot(new Timeslot(datum, LocalTime.of(2, 41), LocalTime.of(3, 20)));
+            proba.setDate(LocalDate.parse("2025-01-12"));
+            proba.setStartTime(LocalTime.parse("15:00:00"));
+            proba.setEndTime(LocalTime.parse("16:00:00"));
             reservationRepository.save(proba);
         };
     }
