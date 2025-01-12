@@ -1,6 +1,6 @@
 package com.survey.users.NotificationService.controller;
 
-import com.survey.users.NotificationService.dto.RegistrationDTO;
+import com.survey.users.NotificationService.dto.UniversalDTO;
 import com.survey.users.NotificationService.service.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Boolean> confirmRegistration(@RequestBody RegistrationDTO registrationDTO) {
-        return new ResponseEntity<>(notificationService.registrationMail(registrationDTO), HttpStatus.OK);
+    public ResponseEntity<Boolean> confirmRegistration(@RequestBody UniversalDTO universalDTO) {
+        return new ResponseEntity<>(notificationService.registrationMail(universalDTO), HttpStatus.OK);
     }
 
 }

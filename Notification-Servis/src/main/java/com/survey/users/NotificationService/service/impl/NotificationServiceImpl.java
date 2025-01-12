@@ -2,7 +2,7 @@ package com.survey.users.NotificationService.service.impl;
 
 import com.survey.users.NotificationService.domain.Notification;
 import com.survey.users.NotificationService.domain.NotificationType;
-import com.survey.users.NotificationService.dto.RegistrationDTO;
+import com.survey.users.NotificationService.dto.UniversalDTO;
 import com.survey.users.NotificationService.repository.NotificationRepository;
 import com.survey.users.NotificationService.repository.NotificationTypeRepository;
 import com.survey.users.NotificationService.service.NotificationService;
@@ -22,64 +22,37 @@ public class NotificationServiceImpl implements NotificationService {
     @Value("${spring.mail.username}")
     private String from;
     @Autowired
-    private JavaMailSender javaMailSender;
     private NotificationRepository notificationRepository;
+    @Autowired
     private NotificationTypeRepository notificationTypeRepository;
+    @Autowired
+    private MrtviMailServer mrtviMailServer;
 
     @Override
-    public boolean sendMail(String to, String[] cc, String subject, String body) {
+    public boolean registrationMail(UniversalDTO universalDTO) {
         try{
-            MimeMessage mailMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage,true);
+            NotificationType email_type = notificationTypeRepository.getNotificationTypeByType(universalDTO.getNotifType());
 
-            messageHelper.setFrom(from);
-            messageHelper.setTo(to);
-            messageHelper.setSubject(subject);
 
-            String htmlContent = "<p>" + body + "</p>";
+            String message = email_type.getContent();
+            for (String param: universalDTO.getParams()) {
+                message = message.replaceFirst("%s", param);
+            }
 
-            htmlContent += "<p>Mozete im pristupiti putem linka <a href=\"http://localhost:8080\" style=\"text-decoration: underline; color: blue;\">aktivacioni_link</a>.</p>";
-
-            messageHelper.setText(htmlContent, true); // true indicates HTML content
-
-            javaMailSender.send(mailMessage);
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean registrationMail(RegistrationDTO registrationDTO) {
-        try{
-            NotificationType email_type = notificationTypeRepository.getNotificationTypeByType("activation");
-            MimeMessage mailMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage,true);
-//"Postovani %s %s aktivaciju naloga %s mozete postici klikom na sledeci link %s"
-            messageHelper.setFrom(from);
-            messageHelper.setTo(registrationDTO.getRecipientEmail());
-            messageHelper.setSubject(email_type.getSubject() + " " + registrationDTO.getUsername());
-
-            String message = String.format(email_type.getContent(), registrationDTO.getFirstName(), registrationDTO.getLastName(), registrationDTO.getUsername(), registrationDTO.getActivationLink());
             String htmlContent = "<p>" + message + "</p>";
 
-            //htmlContent += "<p>Mozete im pristupiti putem linka <a href=\"http://localhost:8080\" style=\"text-decoration: underline; color: blue;\">aktivacioni_link</a>.</p>";
-
-            messageHelper.setText(htmlContent, true); // true indicates HTML content
-
-            javaMailSender.send(mailMessage);
+            mrtviMailServer.sendEmail(universalDTO.getRecipientEmail(), email_type.getSubject(), htmlContent);
 
             Notification newNotification = new Notification();
             newNotification.setType(email_type);
-            newNotification.setRecipientEmail(registrationDTO.getRecipientEmail());
-            newNotification.setRecipientId(registrationDTO.getRecipientId());
-            newNotification.setSenderEmail(registrationDTO.getSenderEmail());
-            newNotification.setSenderId(registrationDTO.getSenderId());
+            newNotification.setRecipientEmail(universalDTO.getRecipientEmail());
+            newNotification.setRecipientId(universalDTO.getRecipientId());
+            newNotification.setSenderEmail(universalDTO.getSenderEmail());
+            newNotification.setSenderId(universalDTO.getSenderId());
             newNotification.setTimestamp(LocalDateTime.now());
             notificationRepository.save(newNotification);
 
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return false;

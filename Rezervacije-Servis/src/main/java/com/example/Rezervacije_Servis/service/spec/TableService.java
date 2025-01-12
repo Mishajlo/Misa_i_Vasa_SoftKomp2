@@ -12,6 +12,6 @@ public interface TableService {
     long createTable(long restaturantId, TableCreationDTO tableCreationDTO);
     List<TableDTO> getTables(long restaurantId);
     long editTable(long id, TableCreationDTO tableCreationDTO);
-    long deleteTable(long id);
+    long deleteTable(long id, String token);
 
 }

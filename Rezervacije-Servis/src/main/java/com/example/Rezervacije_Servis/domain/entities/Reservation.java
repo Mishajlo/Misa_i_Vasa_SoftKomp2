@@ -28,5 +28,6 @@ public class Reservation extends BaseEntity {
     private User_Data userData;
     @Embedded
     private Timeslot timeslot;
+    private Boolean reminder = false;
 
 }

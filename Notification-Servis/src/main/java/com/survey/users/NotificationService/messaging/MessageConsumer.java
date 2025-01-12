@@ -1,6 +1,6 @@
 package com.survey.users.NotificationService.messaging;
 
-import com.survey.users.NotificationService.dto.RegistrationDTO;
+import com.survey.users.NotificationService.dto.UniversalDTO;
 import com.survey.users.NotificationService.service.NotificationService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -22,9 +22,10 @@ public class MessageConsumer {
     }
     */
 
-    @RabbitListener(queues = "queue.registration")
-    public void receiveRegistration(RegistrationDTO registrationDTO){
-        System.out.println("New Registration Received");
-        notificationService.registrationMail(registrationDTO);
+    @RabbitListener(queues = "notification.queue")
+    public void receiveRegistration(UniversalDTO universalDTO){
+        System.out.println("poslato s queuea");
+        System.out.println(universalDTO);
+        notificationService.registrationMail(universalDTO);
     }
 }

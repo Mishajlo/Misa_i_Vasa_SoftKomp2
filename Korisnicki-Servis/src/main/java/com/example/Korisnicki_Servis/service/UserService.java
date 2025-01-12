@@ -26,4 +26,6 @@ public interface UserService {
 
     Boolean activateUser(String code);
 
+    Integer updateReservations(Long id, Boolean increment);
+
 }

@@ -66,14 +66,14 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public long deleteTable(long id) {
+    public long deleteTable(long id, String token) {
         Table table = tableRepository.findById(id).orElse(null);
 
         if (table == null) {
             return -1;
         }
 
-        reservationService.cancelAllReservationsForTable(table.getId());
+        reservationService.cancelAllReservationsForTable(table.getId(), token);
 
         table.setDeleteFlag(true);
         tableRepository.save(table);

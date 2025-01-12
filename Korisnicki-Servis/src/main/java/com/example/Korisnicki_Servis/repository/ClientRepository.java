@@ -7,4 +7,5 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     Client findByActivationLink(String link);
 
+
 }
