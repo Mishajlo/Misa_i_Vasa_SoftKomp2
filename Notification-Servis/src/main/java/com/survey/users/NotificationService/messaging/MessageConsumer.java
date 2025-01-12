@@ -24,8 +24,8 @@ public class MessageConsumer {
 
     @RabbitListener(queues = "notification.queue")
     public void receiveRegistration(UniversalDTO universalDTO){
-        System.out.println("poslato s queuea");
-        System.out.println(universalDTO);
-        notificationService.registrationMail(universalDTO);
+        if (universalDTO != null) {notificationService.registrationMail(universalDTO);}
+
+
     }
 }

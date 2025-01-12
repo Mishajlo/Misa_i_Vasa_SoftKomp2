@@ -24,12 +24,9 @@ public class QueueSender {
 
     public void sendNotification(RegistrationMailDTO request) {
         try {
-            //log.info("Sending notification request for type: {}");
-            System.out.println("STIGAO DO OVDE!!!");
             rabbitTemplate.convertAndSend(notificationExchange, notificationRoutingKey, request);
         } catch (Exception e) {
             log.error("Failed to send notification request", e);
-            // We might want to implement a retry mechanism here
         }
     }
 }

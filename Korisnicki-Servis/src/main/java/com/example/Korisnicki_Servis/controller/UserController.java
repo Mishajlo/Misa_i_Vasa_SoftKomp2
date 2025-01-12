@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<LoggedDto> loginUser(@RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
     }
 
@@ -76,18 +76,6 @@ public class UserController {
         return new ResponseEntity<>(userService.editProfile(id, editedProfile), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/activate/{link}")
-//    public ResponseEntity<Boolean> activateUser(@PathVariable String link) {
-//        System.out.println(link);
-//        return new ResponseEntity<>(userService.activateUser(link), HttpStatus.OK);
-//    }
-
- /*   @GetMapping(value = "/reservations/{userId}")
-    public ResponseEntity<Integer> reservations(@PathVariable Long userId) {
-        return new ResponseEntity<Integer>(userService.getReservations(userId), HttpStatus.OK);
-    }*/
-
-   // @CheckSecurity(roles = {"CLIENT", "MANAGER"})
     @PutMapping(value = "/reservations/{userId}")
     public ResponseEntity<Integer> reservationss(@RequestHeader("Authorization") String header,@PathVariable Long userId, @RequestBody ReservationDTO reservationDTO) {
         return new ResponseEntity<Integer>(userService.updateReservations(userId, reservationDTO.isIncrement()), HttpStatus.OK);

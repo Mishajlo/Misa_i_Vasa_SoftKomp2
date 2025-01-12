@@ -53,7 +53,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.getMyReservations(user_id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{restaurant_id}")
+    @PostMapping(value = "/{restaurant_id}")
     public ResponseEntity<List<ReservationInfoDTO>> getAllReservationsFiltered(@PathVariable long restaurant_id, @RequestBody FilterDTO filterDTO) {
         return new ResponseEntity<>(reservationService.getReservationsWithFilter(restaurant_id, filterDTO), HttpStatus.OK);
     }

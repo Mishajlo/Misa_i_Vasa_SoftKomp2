@@ -179,7 +179,50 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationInfoDTO> getReservationsWithFilter(long restaurantId, FilterDTO filterDTO) {
-        return reservationRepository.filter(restaurantId, filterDTO).stream().map(reservation -> modelMapper.map(reservation, ReservationInfoDTO.class)).toList();
+        List<Reservation> toCheck = reservationRepository.filter(restaurantId);
+
+        for (int i =0; i<toCheck.size(); i++){
+            Reservation check = toCheck.get(i);
+            System.out.println(check);
+            if (filterDTO.getCapacity() != null && filterDTO.getCapacity() != check.getCapacity()) {
+                System.out.println(1);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+            if (filterDTO.getOutside() != null && filterDTO.getOutside() != check.getTable().getSitting_area()){
+                System.out.println(2);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+            if (filterDTO.getSmoking() != null && filterDTO.getSmoking() != check.getTable().getSmoking_area()){
+                System.out.println(3);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+            if (filterDTO.getAddress() != null && filterDTO.getAddress() != check.getTable().getRestaurant().getAddress()){
+                System.out.println(4);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+            if (filterDTO.getKitchenType() != null && !filterDTO.getKitchenType().equals(check.getTable().getRestaurant().getKitchenType().toString())){
+                System.out.println(5);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+            if (filterDTO.getDate() != null && !filterDTO.getDate().equals(check.getDate().toString())){
+                System.out.println(6);
+                toCheck.remove(i);
+                i--;
+                continue;
+            }
+        }
+
+        return toCheck.stream().map(reservation -> modelMapper.map(reservation, ReservationInfoDTO.class)).toList();
     }
 
     @Override

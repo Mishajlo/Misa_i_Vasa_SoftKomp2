@@ -2,12 +2,14 @@ package com.survey.users.NotificationService.service.impl;
 
 import com.survey.users.NotificationService.domain.Notification;
 import com.survey.users.NotificationService.domain.NotificationType;
+import com.survey.users.NotificationService.dto.NotificationInfoDTO;
 import com.survey.users.NotificationService.dto.UniversalDTO;
 import com.survey.users.NotificationService.repository.NotificationRepository;
 import com.survey.users.NotificationService.repository.NotificationTypeRepository;
 import com.survey.users.NotificationService.service.NotificationService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +17,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -27,15 +31,17 @@ public class NotificationServiceImpl implements NotificationService {
     private NotificationTypeRepository notificationTypeRepository;
     @Autowired
     private MrtviMailServer mrtviMailServer;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public boolean registrationMail(UniversalDTO universalDTO) {
         try{
             NotificationType email_type = notificationTypeRepository.getNotificationTypeByType(universalDTO.getNotifType());
 
-
             String message = email_type.getContent();
             for (String param: universalDTO.getParams()) {
+                if (param == null) { return false; }
                 message = message.replaceFirst("%s", param);
             }
 
@@ -56,6 +62,16 @@ public class NotificationServiceImpl implements NotificationService {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    @Override
+    public List<NotificationInfoDTO> getAllNotifications() {
+        return notificationRepository.findAll().stream().map(notification -> modelMapper.map(notification, NotificationInfoDTO.class)).toList();
+    }
+
+    @Override
+    public List<NotificationInfoDTO> getNotificationsByUserId(long userId) {
+        return notificationRepository.findAllByRecipientId(userId).stream().map(notification -> modelMapper.map(notification, NotificationInfoDTO.class)).toList();
     }
 
 }

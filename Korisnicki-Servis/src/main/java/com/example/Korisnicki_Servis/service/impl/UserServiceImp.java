@@ -179,17 +179,25 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public LoggedDto login(LoginDto loginDto) {
         User user = userRepository.findByUsernameAndPassword(loginDto.getUsername(), loginDto.getPassword()).orElse(null);
         if(user != null) {
-            if(user.getStatus() == Status.BANNED) return "User is banned";
-            if(user.getStatus() == Status.INACTIVE) return "User is not activated";
+            if(user.getStatus() == Status.BANNED) return new LoggedDto();//"User is banned";
+            if(user.getStatus() == Status.INACTIVE) return new LoggedDto();// "User is not activated";
             Claims claims = Jwts.claims();
+            claims.put("userId", user.getId());
             claims.put("role", user.getRole().toString());
             claims.put("username", user.getUsername());
-            return tokenService.generate(claims);
+            claims.put("email", user.getEmail());
+            LoggedDto returndto = new LoggedDto();
+            returndto.setUsername(user.getUsername());
+            returndto.setUserId(user.getId());
+            returndto.setRole(user.getRole().toString());
+            returndto.setToken(tokenService.generate(claims));
+            returndto.setEmail(user.getEmail());
+            return returndto;
         }
-        return "User does not exist";
+        return new LoggedDto();//"User does not exist";
     }
 
 

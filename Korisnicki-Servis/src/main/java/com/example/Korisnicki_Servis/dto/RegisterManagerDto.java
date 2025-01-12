@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 
 @Setter
 @Getter
@@ -21,7 +23,7 @@ public class RegisterManagerDto {
     private String first_name;
     private String last_name;
     private Restaurant restaurant;
-    private String date_of_employment;
+    private String date_of_employment = LocalDate.now().toString();
     private String status = Status.INACTIVE.toString();
     private String role = Role.MANAGER.toString();
     private String activationCode = String.valueOf(System.currentTimeMillis());

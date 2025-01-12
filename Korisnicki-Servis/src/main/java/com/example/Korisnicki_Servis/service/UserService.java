@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    String login(LoginDto loginDto);
+    LoggedDto login(LoginDto loginDto);
 
     List<ClientDto> findAll();
 

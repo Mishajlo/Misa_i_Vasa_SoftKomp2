@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RestaurantDTO {
-    private long restaurant_id;
+    private long id;
     private String name;
     private Address address;
     private String description;

@@ -59,6 +59,13 @@ public class AppRunner {
             sto.setSmoking_area(true);
             tableRepository.save(sto);
 
+            Achievement achievement = new Achievement();
+            achievement.setRestaurant(r);
+            achievement.setDescription("Super Kul Probni Achievement");
+            achievement.setTitle("Probica :D");
+            achievement.setCondition(1);
+            achievementRepository.save(achievement);
+
             Reservation proba = new Reservation();
             proba.setTable(sto);
             proba.setCapacity(3);

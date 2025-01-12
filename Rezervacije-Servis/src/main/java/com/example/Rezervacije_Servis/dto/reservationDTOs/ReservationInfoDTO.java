@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservationInfoDTO {
-    private long reservation_id;
+    private long id;
     private Boolean smoking_area;
     private Boolean sitting_area;
     private int capacity;
